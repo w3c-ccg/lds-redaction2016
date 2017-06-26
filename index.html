@@ -254,7 +254,7 @@ A simple example of a Redaction 2016 signature:
 {
   "@context": ["http://schema.org/", "https://w3id.org/security/v1"],
   "description": "Hello world!",
-  "socialSecurityNumber": "ni://sha256;813f2d3396f038c3226fb70327efacd068284c93a857453fc52441c90b0b797d",
+  "socialSecurityNumber": "ni://redaction-sha256;813f2d3396f038c3226fb70327efacd068284c93a857453fc52441c90b0b797d",
   "signature": {
     "type": "RedactionSignature2016",
     "created": "2016-11-07T05:33:31Z",
@@ -264,6 +264,50 @@ A simple example of a Redaction 2016 signature:
   }
 }
       </pre>
+      
+      <p>
+To verify the signature above, a verifier would first use the 
+RDF Dataset normalization algorithm to normalize the content above.
+      </p>
+      
+      <pre class="example highlight">
+_:c14n0 <http://schema.org/description> "Hello world!" .
+_:c14n0 <http://schema.org/socialSecurityNumber> "ni://redaction-sha256;813f2d3396f038c3226fb70327efacd068284c93a857453fc52441c90b0b797d" .
+      </pre>
+      
+      <p>
+All redaction-sha256 hashes would be replaced with their hash value:
+      </p>
+      
+      <pre class="example highlight">
+_:c14n0 <http://schema.org/description> "Hello world!" .
+813f2d3396f038c3226fb70327efacd068284c93a857453fc52441c90b0b797d
+      </pre>
+      
+      <p>
+All remaining lines would be hashed:
+      </p>
+      
+      <pre class="example highlight">
+d5abfa3bb592cfdc09d130daa9de861768e129647de86cf239dcc1b1b4085597
+813f2d3396f038c3226fb70327efacd068284c93a857453fc52441c90b0b797d
+      </pre>
+
+      <p>
+All hashes would then be sorted:
+      </p>
+
+      <pre class="example highlight">
+813f2d3396f038c3226fb70327efacd068284c93a857453fc52441c90b0b797d
+d5abfa3bb592cfdc09d130daa9de861768e129647de86cf239dcc1b1b4085597
+      </pre>
+
+      <p>
+The data above would then be hashed again and then a standard 
+signature verification algorithm, such as RSA, would be employed to 
+verify that the signature is valid.
+      </p>
+
     </section>
 
   </body>
